@@ -6,15 +6,37 @@ import java.util.Set;
 
 public class Model {
 		
-	private final int NMAX = 100;
-	private final int TMAX = 8;
+	private int NMAX;
+	private int TMAX;;
 	private int segreto;
 	private int tentativiFatti;
 	private boolean inGioco = false;
 	
 	private Set<Integer> tentativi;
 	
-	public void nuovaPartita() {
+	public void nuovaPartitaFacile() {
+		NMAX = 100;
+		TMAX = 7;
+		//gestione inizio nuova partita
+    	this.segreto = (int) (Math.random() * NMAX) +1;
+    	this.tentativiFatti = 0;
+    	this.inGioco = true;
+    	this.tentativi = new HashSet<Integer>();
+	}
+	
+	public void nuovaPartitaMedio() {
+		NMAX = 250;
+		TMAX = 9;
+		//gestione inizio nuova partita
+    	this.segreto = (int) (Math.random() * NMAX) +1;
+    	this.tentativiFatti = 0;
+    	this.inGioco = true;
+    	this.tentativi = new HashSet<Integer>();
+	}
+	
+	public void nuovaPartitaDifficile() {
+		NMAX = 1000;
+		TMAX = 10;
 		//gestione inizio nuova partita
     	this.segreto = (int) (Math.random() * NMAX) +1;
     	this.tentativiFatti = 0;

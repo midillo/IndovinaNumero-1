@@ -12,6 +12,9 @@ import it.polito.tdp.IndovinaNumero.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -25,6 +28,18 @@ public class FXMLController {
 
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
+
+    @FXML
+    private MenuButton btnLivello;
+
+    @FXML
+    private MenuItem btnFacile;
+
+    @FXML
+    private MenuItem btnMedio;
+
+    @FXML
+    private MenuItem btnDifficile;
     
     @FXML // fx:id="layoutTentativo"
     private HBox layoutTentativo; // Value injected by FXMLLoader
@@ -45,15 +60,46 @@ public class FXMLController {
     private TextArea txtRisultato; // Value injected by FXMLLoader
 
     @FXML
+    private ProgressBar barProgress;
+    
+    @FXML
     void doNuovaPartita(ActionEvent event) {
-    	//inizio partita
-    	this.model.nuovaPartita();
     	//gestione dell'interfaccia
     	this.txtRisultato.clear();
-    	this.txtTentativi.setText(Integer.toString(this.model.getTMAX()));
-    	this.layoutTentativo.setDisable(false);
+    	doLivelloDifficolta(event);
     }
 
+    @FXML
+    void doLivelloDifficolta(ActionEvent event) {
+    	btnLivello.setDisable(false);
+    	txtRisultato.setText("Gioco indovina numero\t\tDifficoltà:\nFacile --> 7 tentativi per indovinare un numero da 1 a 100\n"
+    			+"Medio --> 9 tentativi per indovinare un numero da 1 a 250\nDifficile --> 10 tentativi per indovinare un numero da 1 a 1000");
+    }
+    
+    @FXML
+    void doFacile(ActionEvent event) {
+    	this.model.nuovaPartitaFacile();;
+    	this.txtTentativi.setText(Integer.toString(this.model.getTMAX()));
+    	this.layoutTentativo.setDisable(false);
+    	this.barProgress.setProgress(0);
+    }
+
+    @FXML
+    void doMedio(ActionEvent event) {
+    	this.model.nuovaPartitaMedio();;
+    	this.txtTentativi.setText(Integer.toString(this.model.getTMAX()));
+    	this.layoutTentativo.setDisable(false);
+    	this.barProgress.setProgress(0);
+    }
+    
+    @FXML
+    void doDifficile(ActionEvent event) {
+    	this.model.nuovaPartitaDifficile();;
+    	this.txtTentativi.setText(Integer.toString(this.model.getTMAX()));
+    	this.layoutTentativo.setDisable(false);
+    	this.barProgress.setProgress(0);
+    }	
+    
     @FXML
     void doTentativo(ActionEvent event) {
     	//lettura input dell'utente
@@ -72,6 +118,7 @@ public class FXMLController {
     	int result;
     	try {
     		result = this.model.tentativo(tentativo);
+    		barProgress.setProgress((double)model.getTentativiFatti()/8);
     	}catch(IllegalStateException se) {
     		this.txtRisultato.setText(se.getMessage());
     		this.layoutTentativo.setDisable(true);
@@ -98,10 +145,15 @@ public class FXMLController {
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert btnNuovaPartita != null : "fx:id=\"btnNuovaPartita\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert btnLivello != null : "fx:id=\"btnLivello\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert btnFacile != null : "fx:id=\"btnFacile\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert btnMedio != null : "fx:id=\"btnMedio\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert btnDifficile != null : "fx:id=\"btnDifficile\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtTentativi != null : "fx:id=\"txtTentativi\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtTentativoUtente != null : "fx:id=\"txtTentativoUtente\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnProva != null : "fx:id=\"btnProva\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtRisultato != null : "fx:id=\"txtRisultato\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert barProgress != null : "fx:id=\"barProgress\" was not injected: check your FXML file 'Scene.fxml'.";
     }
     
     public void setModel(Model model) {
